@@ -1,7 +1,7 @@
 #Importamos librerias
 import pandas as pd
 import numpy as np
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from fastapi import FastAPI
@@ -13,9 +13,15 @@ df = pd.read_csv('dfconcatenado.csv')
 # http://127.0.0.1:8000/
 
 app = FastAPI()
+#Cambiamos al tipo de dato que necesitamos
+df['release_date'] = pd.to_datetime(df['release_date'], errors = 'coerce')
+df['release_year'] = pd.to_numeric(df['release_year'], errors='coerce')
+df['release_date'] = pd.to_datetime(df['release_date'], errors = 'coerce')
+df['revenue'] = pd.to_numeric(df['revenue'], errors='coerce')
+df['budget'] = pd.to_numeric(df['budget'], errors='coerce')
 
 
-
+#                       Empezamos las consultas
 
 #Consulta 1 -- Debe devolver la cantidad de películas producidas en ese idioma.
 @app.get('/peliculas_idioma/{idioma}')
@@ -69,7 +75,7 @@ def productoras_exitosas(Productora: str):
 
 #Consulta 6 -- #Se ingresa el nombre de un director que se encuentre dentro de un dataset debiendo devolver el éxito del mismo medido a través del retorno. 
 #Además, deberá devolver el nombre de cada película con la fecha de lanzamiento, retorno individual, costo y ganancia de la misma.
-@app.get("/director/{nombre_director}")
+@app.get("/get_director/{nombre_director}")
 def get_director(nombre_director: str):
     nombre_director = nombre_director.lower()  ##Para ignorar mayusculas y minusculas
     # Relleno los valores NaN en las columnas relevantes con valores adecuados para que no largue error
@@ -100,8 +106,7 @@ def get_director(nombre_director: str):
 
     return respuesta
 
-
-
+#                               Sistema de recomendación
 
 
 
