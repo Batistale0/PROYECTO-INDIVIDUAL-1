@@ -23,6 +23,8 @@ Deben crear 6 funciones para los endpoints que se consumirán en la API, recuerd
 
 Todas las funciones se encuentran en (main.py).
 
+LINK FASTAPI DEPLOY: https://project-deployment-coxa.onrender.com/docs#/
+
 
 ### Descripción del problema (Contexto y rol a desarrollar):
 
