@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.neighbors import NearestNeighbors
 
 from fastapi import FastAPI
 
@@ -110,7 +110,30 @@ def get_director(nombre_director: str):
 
 #                               Sistema de recomendación
 
+# Creación de la matriz TF-IDF
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(df['title'])
 
+# Clasificamos
+model = NearestNeighbors(n_neighbors=6, algorithm='auto')
+model.fit(tfidf_matrix)
+
+# Función de recomendación
+@app.get('/recommend_movies/{movie_title}')
+def recommend_movies(movie_title):
+    # Busca el índice de la película en la base de datos
+    idx = df[df['title'] == movie_title].index[0]
+
+    # Encuentra los 6 documentos más similares utilizando k-vecinos
+    distances, indices = model.kneighbors(tfidf_matrix[idx], n_neighbors=6)
+
+    # Devuelve los títulos de las películas recomendadas
+    recommended_movies = [df['title'][i] for i in indices.flatten()]
+    recommended_movies.pop(0)  # Elimina la película de consulta de la lista
+
+    return recommended_movies
+
+#
 
 
 
