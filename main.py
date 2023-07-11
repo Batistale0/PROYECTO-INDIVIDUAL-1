@@ -19,6 +19,8 @@ df['release_year'] = pd.to_numeric(df['release_year'], errors='coerce')
 df['release_date'] = pd.to_datetime(df['release_date'], errors = 'coerce')
 df['revenue'] = pd.to_numeric(df['revenue'], errors='coerce')
 df['budget'] = pd.to_numeric(df['budget'], errors='coerce')
+df['runtime'] = pd.to_numeric(df['runtime'], errors='coerce')
+
 
 
 #                       Empezamos las consultas
